@@ -11,13 +11,27 @@ body {
     padding: 0;
     overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     text-align: center;
     color: white;
+}
+
+/* Romantic dark blur overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    z-index: -1;
 }
 
 .container {
@@ -28,11 +42,13 @@ body {
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
 }
 
 p {
     font-size: 1.2rem;
     margin-bottom: 40px;
+    animation: fadeIn 3s ease-in-out;
 }
 
 button {
@@ -42,7 +58,7 @@ button {
     border-radius: 30px;
     cursor: pointer;
     position: absolute;
-    transition: 0.3s;
+    transition: 0.2s ease;
 }
 
 #yesBtn {
@@ -61,10 +77,9 @@ button {
     left: 55%;
 }
 
-/* Floating Hearts */
+/* Floating hearts */
 .heart {
-    position: absolute;
-    color: rgba(255,255,255,0.8);
+    position: fixed;
     font-size: 22px;
     animation: float 6s linear infinite;
 }
@@ -73,26 +88,29 @@ button {
     0% { transform: translateY(100vh); opacity: 1; }
     100% { transform: translateY(-10vh); opacity: 0; }
 }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 </style>
 </head>
 
 <body>
 
 <!-- Background Music -->
-<audio autoplay loop>
+<audio id="bgMusic" loop>
   <source src="love.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
     <h1>My Dearest Paridhi ❤️</h1>
     <p>
-        Paridhi,<br><br>
         From the moment you entered my life,<br>
-        everything felt softer… brighter… magical ✨<br><br>
-        Today — <b>our special day</b> —<br>
-        I want to ask you something from my heart 💍<br><br>
-        I don’t just want memories with you…<br>
-        I want forever with you.
+        everything became magical ✨<br><br>
+        Today, I don’t just want memories with you…<br>
+        I want forever with you 💍<br><br>
+        Will you be mine forever?
     </p>
 
     <button id="yesBtn" onclick="sayYes()">Yes, Rishi ❤️</button>
@@ -100,22 +118,34 @@ button {
 </div>
 
 <script>
+
+/* Play music on first interaction */
+document.addEventListener("click", function() {
+    const music = document.getElementById("bgMusic");
+    if (music) music.play();
+}, { once: true });
+
 const noBtn = document.getElementById("noBtn");
 
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("click", moveButton);
+/* Make NO button run away (works on phone & desktop) */
+noBtn.addEventListener("mouseenter", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
 
-function moveButton() {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
+function moveButton(e) {
+    e.preventDefault();
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 60);
+
+    noBtn.style.position = "fixed";
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 }
 
+/* YES button action */
 function sayYes() {
     document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#ff758c,#ff7eb3);color:white;font-family:Segoe UI;text-align:center;">
-        <div>
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:url('background.jpg') no-repeat center center fixed;background-size:cover;color:white;font-family:Segoe UI;text-align:center;">
+        <div style="background:rgba(0,0,0,0.6);padding:40px;border-radius:20px;">
             <h1>She Said YES!!! 💍❤️</h1>
             <h2>Paridhi & Rishi — Forever Begins Today ✨</h2>
             <p>You just made me the happiest man alive 🥹</p>
@@ -138,6 +168,7 @@ function createHeart() {
 }
 
 setInterval(createHeart, 300);
+
 </script>
 
 </body>
